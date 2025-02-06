@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.cdnfonts.com/css/romantic" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://png.pngtree.com/background/20250103/original/pngtree-close-up-texture-of-blue-roses-a-beautiful-summer-flowers-background-picture-image_13574834.jpg');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .buttons-div {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        
+
+        button {
+            margin: 10px;
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:focus {
+            outline: none;
+        }
+        
+        h2 {
+            font-family: 'Romantic';
+            margin: 20px 0;
+            font-size: 85px;
+            color: #fff;
+            text-shadow: 5px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -1px 0 0 #000;
+            position: relative;
+            z-index: 1;
+        }
+
+        h3 {
+            font-family: 'Romantic';
+            margin: 20px 0;
+            font-size: 80px;
+            color: #fff;
+            text-shadow: 5px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -1px 0 0 #000;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+        
+        .question-div {
+            margin-top: 250px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .buttons-div {
+            margin-top: 50px;
+        }
+        
+        .no-button {
+            background-color: red;
+            font-size: 40px;
+            color: white;
+            position: relative;
+            z-index: 2;
+            border: 3px solid red;
+            box-shadow: 0 0 10px red;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .yes-button {
+            background-color: green;
+            color: white;
+            font-size: 40px;  /* Initial size same as no-button */
+            position: relative;
+            z-index: 3;
+            border: 3px solid green;
+            box-shadow: 0 0 10px green;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .love-text-div {
+            text-align: center;
+            margin-top: 250px;
+            display: none;
+        }
+        
+        .gif-div {
+            text-align: center;
+            margin-top: 1px;
+            position: relative;
+            z-index: 1;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="questionContainer" class="container">
+        <div class="question-div">
+            <h2>Will you be my valentine?</h2>
+            <div class="buttons-div">
+                <button id="noButton" class="no-button">No</button>
+                <button id="yesButton" class="yes-button">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loveTextDiv" class="love-text-div">
+        <h3>Happy Valentines Day!</h3>
+        <h3>I love you</h3>
+    </div>
+    
+    <div id="gifDiv" class="gif-div">
+        <img id="valentineGif" alt="Valentine's Day GIF">
+    </div>
+
+    <script>
+        // Constants and Variables
+        let showLoveText = false;
+        let showGif = false;
+        let noButtonCount = 0;
+        let yesButtonSize = 40;
+        const minButtonSize = 40;
+        const gifUrl = 'https://media.tenor.com/WjlNymHcH3oAAAAi/love-bear-lovedina.gif';
+
+        // Array of No button texts
+        const noButtonTexts = [
+            'No', 'Are you sure?', 'Really sure?', 'Are you positive?', 
+            'Like, really positive?', 'Think about this', 'Just think about this', 
+            "If you say no, I'll be very sad", 'Like, really sad', 
+            'Really really sad :(', 'Fine, you win', 'Just kidding, say yes', 
+            'Please say yes', 'Look over there -->', "It's a pretty button", 
+            'Click him, not me', "Don't click me", 'Please stop', 
+            'You know I have to type this all out', 'It gets hard okay', 
+            "Okay, I'm done now", 'I give up', 'STOP CLICKING ME', 
+            'Seriously, stop', "I'll never win :(", 'No', 'No', 'No', 
+            'NO', 'NOOOOOO', 'Why are you still clicking me?', 
+            "Okay, I'm done for real now haha", "I'm serious", 
+            'Just click yes', 'Bye', ' ', ' ', ' ', '...why?', 
+            "Just click yes, I'm out of ideas haha", "you're enjoying this arent't you",
+            "I'm not", "if you click me again, I'll blow up", "I'm serious",
+            "It's dangerous to click me", "Fine, I won't blow up", 
+            'But seriously', 'Stop clicking me', 'No', 'No', 'Noooo',
+            '-_-', 'This is the last one, just No after this'
+        ];
+
+        // Function to get No button text
+        function getNoButtonText() {
+            return noButtonTexts[noButtonCount] || 'No';
+        }
+
+        // No button click handler
+        function onNoClick() {
+            noButtonCount++;
+            yesButtonSize = Math.max(noButtonCount * 10 + 40, minButtonSize);
+            
+            // Update Yes button size
+            const yesButton = document.getElementById('yesButton');
+            if (yesButton) {
+                yesButton.style.fontSize = yesButtonSize + 'px';
+            }
+
+            // Update No button text
+            const noButton = document.getElementById('noButton');
+            if (noButton) {
+                noButton.textContent = getNoButtonText();
+            }
+        }
+
+        // Yes button click handler
+        function onYesClick() {
+            showLoveText = true;
+            showGif = true;
+            
+            // Hide question container
+            const questionContainer = document.getElementById('questionContainer');
+            if (questionContainer) {
+                questionContainer.style.display = 'none';
+            }
+
+            // Show love text and gif
+            const loveTextDiv = document.getElementById('loveTextDiv');
+            const gifDiv = document.getElementById('gifDiv');
+            if (loveTextDiv) {
+                loveTextDiv.style.display = 'block';
+            }
+            if (gifDiv) {
+                gifDiv.style.display = 'block';
+            }
+        }
+
+        // Initialize when document is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial GIF source
+            const valentineGif = document.getElementById('valentineGif');
+            if (valentineGif) {
+                valentineGif.src = gifUrl;
+            }
+
+            // Add click event listeners
+            const noButton = document.getElementById('noButton');
+            const yesButton = document.getElementById('yesButton');
+            
+            if (noButton) {
+                noButton.addEventListener('click', onNoClick);
+            }
+            
+            if (yesButton) {
+                yesButton.addEventListener('click', onYesClick);
+            }
+        });
+    </script>
+</body>
+</html>
